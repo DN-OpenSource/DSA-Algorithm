@@ -1,130 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>From Zero to AI — DSA &amp; Algorithms Course</title>
-  <style>
-    :root{--bg:#0f1117;--bg2:#161b27;--bg3:#1e2535;--border:#2a3147;--accent:#6c63ff;--accent2:#00c8ff;--text:#e2e8f0;--muted:#8892a4;--green:#22c55e;--yellow:#f59e0b;--red:#ef4444;--r:12px;}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    html{scroll-behavior:smooth;}
-    body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden;}
-    ::-webkit-scrollbar{width:6px;} ::-webkit-scrollbar-track{background:var(--bg);} ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-    /* NAV */
-    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(15,17,23,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:60px;}
-    .logo{font-weight:800;font-size:1.1rem;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    .nav-links{display:flex;gap:1.5rem;list-style:none;}
-    .nav-links a{color:var(--muted);text-decoration:none;font-size:.875rem;transition:color .2s;}
-    .nav-links a:hover{color:var(--text);}
-    .hbg{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;}
-    .hbg span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;}
-    @media(max-width:768px){
-      .nav-links{display:none;}
-      .nav-links.open{display:flex;flex-direction:column;position:fixed;top:60px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--border);padding:1rem 2rem;gap:1rem;z-index:99;}
-      .hbg{display:flex;}
-      section{padding:3.5rem 1rem;}
-      .modal{padding:1.5rem 1rem;}
-      .stats{gap:1.5rem;}
-    }
-    /* PROGRESS */
-    .prog{position:fixed;top:60px;left:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:99;transition:width .1s;}
-    /* HERO */
-    .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:6rem 2rem 4rem;position:relative;overflow:hidden;}
-    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(108,99,255,.18),transparent 70%),radial-gradient(ellipse 60% 40% at 80% 80%,rgba(0,200,255,.08),transparent 60%);pointer-events:none;}
-    .hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:48px 48px;opacity:.22;pointer-events:none;}
-    .hero-inner{position:relative;max-width:800px;}
-    .badge{display:inline-flex;align-items:center;gap:.5rem;background:#1e2a45;border:1px solid var(--border);border-radius:999px;padding:.3rem 1rem;font-size:.8rem;color:var(--accent2);margin-bottom:1.5rem;font-weight:600;letter-spacing:.04em;}
-    h1{font-size:clamp(2.2rem,6vw,4rem);font-weight:800;line-height:1.15;margin-bottom:1.2rem;letter-spacing:-.02em;}
-    h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    .sub{font-size:clamp(1rem,2.5vw,1.2rem);color:var(--muted);max-width:560px;margin:0 auto 2.5rem;}
-    .stats{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem;}
-    .stat-n{font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
-    .stat-l{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:.2rem;}
-    .btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
-    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.75rem;border-radius:8px;font-size:.95rem;font-weight:600;text-decoration:none;transition:all .2s;cursor:pointer;border:none;}
-    .btn-p{background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff;box-shadow:0 4px 20px rgba(108,99,255,.35);}
-    .btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(108,99,255,.5);}
-    .btn-s{background:var(--bg3);color:var(--text);border:1px solid var(--border);}
-    .btn-s:hover{background:var(--border);transform:translateY(-2px);}
-    /* SECTIONS */
-    section{padding:5rem 2rem;}
-    .container{max-width:1140px;margin:0 auto;}
-    .sh{text-align:center;margin-bottom:3rem;}
-    .eye{display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);margin-bottom:.75rem;}
-    .st{font-size:clamp(1.8rem,4vw,2.5rem);font-weight:800;letter-spacing:-.02em;margin-bottom:.75rem;}
-    .sd{color:var(--muted);max-width:540px;margin:0 auto;font-size:1.05rem;}
-    /* TABLES */
-    .tw{overflow-x:auto;border-radius:var(--r);border:1px solid var(--border);}
-    table{width:100%;border-collapse:collapse;font-size:.9rem;}
-    thead th{background:var(--bg3);padding:.85rem 1.2rem;text-align:left;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border);}
-    tbody tr{border-bottom:1px solid var(--border);transition:background .15s;}
-    tbody tr:last-child{border-bottom:none;}
-    tbody tr:hover{background:var(--bg3);}
-    td{padding:.85rem 1.2rem;}
-    .ttag{display:inline-block;background:#1e2a45;border:1px solid var(--border);border-radius:4px;padding:.15rem .5rem;font-size:.75rem;color:var(--muted);margin:.1rem;}
-    .ml{color:var(--text);text-decoration:none;font-weight:600;}
-    .ml:hover{color:var(--accent2);}
-    /* BIG-O */
-    .bg-section{background:var(--bg2);}
-    .bigo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem;margin-bottom:2rem;}
-    .bc{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1.2rem;text-align:center;}
-    .bn{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:.4rem 0;}
-    .be{font-size:.8rem;color:var(--muted);}
-    .ob{display:inline-block;padding:.2rem .55rem;border-radius:4px;font-size:.82rem;font-weight:700;font-family:monospace;}
-    .og{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3);}
-    .oo{background:rgba(245,158,11,.15);color:var(--yellow);border:1px solid rgba(245,158,11,.3);}
-    .ob2{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3);}
-    /* MODULE CARDS */
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:1.5rem;}
-    .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:transform .2s,box-shadow .2s,border-color .2s;cursor:pointer;}
-    .card:hover{transform:translateY(-4px);box-shadow:0 4px 24px rgba(0,0,0,.4);border-color:var(--accent);}
-    .ch{display:flex;align-items:center;gap:1rem;padding:1.2rem 1.4rem .8rem;}
-    .cn{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800;flex-shrink:0;}
-    .ct{font-size:1.05rem;font-weight:700;}
-    .cb{padding:0 1.4rem 1rem;}
-    .cd{font-size:.875rem;color:var(--muted);margin-bottom:.8rem;}
-    .ctags{display:flex;flex-wrap:wrap;gap:.4rem;}
-    .ctag{font-size:.72rem;padding:.2rem .55rem;border-radius:4px;background:#1e2a45;border:1px solid var(--border);color:var(--muted);}
-    .cf{padding:.75rem 1.4rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:.8rem;color:var(--muted);}
-    /* THEMES */
-    .t0{background:rgba(108,99,255,.12);color:#6c63ff;}
-    .t1{background:rgba(0,200,255,.12);color:#00c8ff;}
-    .t2{background:rgba(34,197,94,.12);color:#22c55e;}
-    .t3{background:rgba(245,158,11,.12);color:#f59e0b;}
-    .t4{background:rgba(255,101,132,.12);color:#ff6584;}
-    /* MODAL */
-    .mb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);z-index:200;align-items:center;justify-content:center;padding:1rem;}
-    .mb.open{display:flex;}
-    .modal{background:var(--bg2);border:1px solid var(--border);border-radius:16px;max-width:760px;width:100%;max-height:90vh;overflow-y:auto;padding:2rem;position:relative;}
-    .mc{position:absolute;top:1rem;right:1rem;background:var(--bg3);border:1px solid var(--border);color:var(--text);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;}
-    .mc:hover{background:var(--border);}
-    .modal h2{font-size:1.5rem;margin-bottom:.4rem;}
-    .mm{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem;}
-    .mm span{font-size:.78rem;color:var(--muted);background:#1e2a45;padding:.2rem .6rem;border-radius:4px;border:1px solid var(--border);}
-    .ms{margin-bottom:1.5rem;}
-    .ms h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2);margin-bottom:.6rem;}
-    .ms p,.ms li{font-size:.9rem;color:var(--muted);line-height:1.8;}
-    .ms ul{padding-left:1.2rem;}
-    .ms li{margin-bottom:.3rem;}
-    pre{background:#0d1117;border:1px solid var(--border);border-radius:8px;padding:1rem 1.2rem;overflow-x:auto;font-family:'JetBrains Mono','Fira Code',monospace;font-size:.85rem;color:#e2e8f0;line-height:1.65;}
-    code{font-family:'JetBrains Mono','Fira Code',monospace;background:var(--bg3);padding:.1rem .35rem;border-radius:4px;font-size:.82rem;color:var(--accent2);}
-    pre code{background:none;padding:0;color:inherit;}
-    /* TIPS */
-    .tips{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.2rem;}
-    .tip{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem;}
-    .ti{font-size:1.8rem;margin-bottom:.75rem;}
-    .tit{font-weight:700;margin-bottom:.4rem;font-size:.95rem;}
-    .ttx{font-size:.875rem;color:var(--muted);line-height:1.7;}
-    /* FOOTER */
-    footer{background:var(--bg2);border-top:1px solid var(--border);padding:2.5rem 2rem;text-align:center;}
-    .fl{font-weight:800;font-size:1.2rem;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.4rem;}
-    .fs{font-size:.85rem;color:var(--muted);}
-    .fa{color:var(--accent2);text-decoration:none;}
-    .fa:hover{text-decoration:underline;}
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Zero → AI · DSA &amp; Algorithms Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#080b14;--bg2:#0d1120;--bg3:#121829;--bg4:#18203a;
+  --border:#1e2c4a;--border2:#253356;
+  --a1:#7c6dfa;--a2:#06b6d4;--a3:#f472b6;
+  --text:#f1f5f9;--muted:#64748b;--muted2:#94a3b8;
+  --green:#22c55e;--yellow:#eab308;--red:#f43f5e;
+  --r:14px;--r2:20px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden;}
+::selection{background:rgba(124,109,250,.35);color:#fff;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(1rem,4vw,3rem);background:rgba(8,11,20,.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(30,44,74,.7);}
+.logo{font-weight:900;font-size:1.15rem;letter-spacing:-.02em;background:linear-gradient(120deg,var(--a1),var(--a2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{color:var(--muted2);text-decoration:none;font-size:.875rem;font-weight:500;transition:color .2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--a1),var(--a2));border-radius:2px;transform:scaleX(0);transition:transform .25s;}
+.nav-links a:hover{color:#fff;}.nav-links a:hover::after{transform:scaleX(1);}
+.hbg{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;}
+.hbg span{display:block;width:22px;height:2px;background:var(--muted2);border-radius:2px;}
+@media(max-width:800px){
+  .nav-links{display:none;}
+  .nav-links.open{display:flex;flex-direction:column;position:fixed;top:64px;left:0;right:0;background:rgba(13,17,32,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:1.5rem 2rem;gap:1.25rem;z-index:199;}
+  .hbg{display:flex;}
+  section{padding:4rem 1.25rem!important;}
+  .mi{padding:1.5rem 1.25rem!important;}
+  .hero-stats{gap:1.5rem;}
+  .hero-btns{flex-direction:column;align-items:center;}
+}
+
+/* PROGRESS */
+#prog{position:fixed;top:64px;left:0;height:2px;background:linear-gradient(90deg,var(--a1),var(--a2),var(--a3));z-index:199;transition:width .12s linear;box-shadow:0 0 8px var(--a1);}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:7rem 2rem 5rem;position:relative;overflow:hidden;}
+#particles{position:absolute;inset:0;pointer-events:none;width:100%;height:100%;}
+.hero-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(124,109,250,.15),transparent 70%),radial-gradient(ellipse 50% 35% at 85% 75%,rgba(6,182,212,.1),transparent 60%),radial-gradient(ellipse 40% 30% at 15% 60%,rgba(244,114,182,.07),transparent 60%);}
+.hero-inner{position:relative;max-width:840px;}
+.hero-badge{display:inline-flex;align-items:center;gap:.6rem;background:rgba(124,109,250,.1);border:1px solid rgba(124,109,250,.3);border-radius:999px;padding:.35rem 1.1rem;font-size:.8rem;font-weight:600;color:var(--a2);margin-bottom:2rem;letter-spacing:.06em;animation:fi .6s ease both;}
+h1{font-size:clamp(2.5rem,7vw,5rem);font-weight:900;line-height:1.1;margin-bottom:1.25rem;letter-spacing:-.03em;animation:fi .7s .1s ease both;}
+.grad{background:linear-gradient(135deg,var(--a1) 0%,var(--a2) 50%,var(--a3) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:clamp(1.05rem,2.5vw,1.25rem);color:var(--muted2);max-width:580px;margin:0 auto 2.5rem;line-height:1.75;animation:fi .7s .2s ease both;}
+.hero-stats{display:flex;gap:2.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem;animation:fi .7s .3s ease both;}
+.stat-num{font-size:2rem;font-weight:900;line-height:1;letter-spacing:-.03em;background:linear-gradient(135deg,var(--a1),var(--a2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.stat-lbl{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:.25rem;}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fi .7s .4s ease both;}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 2rem;border-radius:10px;font-size:.95rem;font-weight:700;text-decoration:none;transition:all .2s;cursor:pointer;border:none;font-family:inherit;letter-spacing:-.01em;}
+.btn-p{background:linear-gradient(135deg,var(--a1),#6366f1);color:#fff;box-shadow:0 0 0 1px rgba(124,109,250,.4),0 8px 32px rgba(124,109,250,.3);}
+.btn-p:hover{transform:translateY(-3px);box-shadow:0 0 0 1px rgba(124,109,250,.5),0 12px 40px rgba(124,109,250,.45);}
+.btn-g{background:rgba(255,255,255,.05);color:var(--text);border:1px solid var(--border2);}
+.btn-g:hover{background:rgba(255,255,255,.1);transform:translateY(-3px);}
+@keyframes fi{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+
+/* SECTIONS */
+section{padding:6rem 2rem;}
+.container{max-width:1160px;margin:0 auto;}
+.sh{text-align:center;margin-bottom:3.5rem;}
+.eye{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--a2);margin-bottom:.75rem;}
+.st{font-size:clamp(1.9rem,4vw,2.8rem);font-weight:900;letter-spacing:-.03em;margin-bottom:.75rem;line-height:1.15;}
+.sd{color:var(--muted2);max-width:520px;margin:0 auto;font-size:1.05rem;}
+
+/* TABLES */
+.tw{overflow-x:auto;border-radius:var(--r2);border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:.9rem;}
+thead th{background:var(--bg3);padding:1rem 1.4rem;text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);border-bottom:1px solid var(--border);font-weight:600;}
+tbody tr{border-bottom:1px solid var(--border);transition:background .15s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:var(--bg3);}
+td{padding:.9rem 1.4rem;vertical-align:middle;}
+td:first-child{font-weight:800;color:var(--a1);width:52px;font-size:1.05rem;}
+.ml{color:var(--text);text-decoration:none;font-weight:700;}.ml:hover{color:var(--a2);}
+.ttag{display:inline-block;background:rgba(30,44,74,.8);border:1px solid var(--border);border-radius:5px;padding:.15rem .55rem;font-size:.72rem;color:var(--muted2);margin:.1rem;}
+
+/* BIG-O */
+#bigo{background:var(--bg2);}
+.bigo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem;margin-bottom:2rem;}
+.bc{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem 1.2rem;text-align:center;transition:border-color .2s,transform .2s;}
+.bc:hover{border-color:var(--border2);transform:translateY(-3px);}
+.bb{display:inline-block;padding:.25rem .65rem;border-radius:6px;font-size:.9rem;font-weight:800;font-family:'JetBrains Mono',monospace;margin-bottom:.5rem;}
+.bg{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25);}
+.by{background:rgba(234,179,8,.12);color:var(--yellow);border:1px solid rgba(234,179,8,.25);}
+.br{background:rgba(244,63,94,.12);color:var(--red);border:1px solid rgba(244,63,94,.25);}
+.bn{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:.3rem 0;}
+.be{font-size:.8rem;color:var(--muted2);}
+.ob{display:inline-block;padding:.2rem .55rem;border-radius:5px;font-size:.8rem;font-weight:700;font-family:'JetBrains Mono',monospace;}
+.ob-g{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25);}
+.ob-y{background:rgba(234,179,8,.12);color:var(--yellow);border:1px solid rgba(234,179,8,.25);}
+.ob-r{background:rgba(244,63,94,.12);color:var(--red);border:1px solid rgba(244,63,94,.25);}
+
+/* MODULE CARDS */
+#modules{background:var(--bg);}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem;}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;cursor:pointer;position:relative;transition:transform .25s,border-color .25s,box-shadow .25s;}
+.card::before{content:'';position:absolute;inset:0;border-radius:var(--r2);opacity:0;background:radial-gradient(circle at 50% 0%,var(--cg,rgba(124,109,250,.12)),transparent 70%);transition:opacity .3s;pointer-events:none;}
+.card:hover{transform:translateY(-6px);border-color:var(--cc,var(--a1));box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px var(--cc,var(--a1));}
+.card:hover::before{opacity:1;}
+.ctop{padding:1.4rem 1.5rem 1rem;display:flex;align-items:flex-start;gap:1rem;}
+.cnum{width:44px;height:44px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:900;font-family:'JetBrains Mono',monospace;}
+.ctitle{font-size:1.05rem;font-weight:800;margin-bottom:.2rem;letter-spacing:-.01em;}
+.csub{font-size:.8rem;color:var(--muted);line-height:1.5;}
+.ctags{padding:0 1.5rem 1rem;display:flex;flex-wrap:wrap;gap:.4rem;}
+.ctag{font-size:.7rem;padding:.2rem .55rem;border-radius:5px;background:rgba(30,44,74,.9);border:1px solid var(--border);color:var(--muted2);}
+.cfoot{padding:.85rem 1.5rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:.78rem;color:var(--muted);}
+.cfoot span:last-child{color:var(--a2);font-weight:600;}
+/* card color vars */
+.c0{--cc:#7c6dfa;--cg:rgba(124,109,250,.12);}
+.c1{--cc:#06b6d4;--cg:rgba(6,182,212,.1);}
+.c2{--cc:#22c55e;--cg:rgba(34,197,94,.1);}
+.c3{--cc:#f59e0b;--cg:rgba(245,158,11,.1);}
+.c4{--cc:#f472b6;--cg:rgba(244,114,182,.1);}
+.n0{background:rgba(124,109,250,.15);color:#7c6dfa;}
+.n1{background:rgba(6,182,212,.15);color:#06b6d4;}
+.n2{background:rgba(34,197,94,.15);color:#22c55e;}
+.n3{background:rgba(245,158,11,.15);color:#f59e0b;}
+.n4{background:rgba(244,114,182,.15);color:#f472b6;}
+
+/* AI BRIDGE */
+#ai{background:var(--bg2);}
+.aigrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;}
+.aic{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem 1.3rem;display:flex;gap:1rem;align-items:flex-start;transition:border-color .2s,background .2s;}
+.aic:hover{border-color:var(--border2);background:var(--bg4);}
+.aid{font-size:.8rem;font-weight:800;color:var(--a2);white-space:nowrap;min-width:90px;padding-top:.05rem;}
+.aim{font-size:.82rem;color:var(--muted2);line-height:1.6;}
+
+/* TIPS */
+#study{background:var(--bg);}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem;}
+.tip{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:1.6rem;transition:transform .2s,border-color .2s;}
+.tip:hover{transform:translateY(-4px);border-color:var(--border2);}
+.ti{font-size:2rem;margin-bottom:.9rem;}
+.tit{font-size:1rem;font-weight:800;margin-bottom:.5rem;letter-spacing:-.01em;}
+.ttx{font-size:.875rem;color:var(--muted2);line-height:1.75;}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:3rem 2rem;text-align:center;}
+.fl{font-weight:900;font-size:1.3rem;letter-spacing:-.02em;background:linear-gradient(120deg,var(--a1),var(--a2),var(--a3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem;}
+.fs{font-size:.85rem;color:var(--muted);}
+.fa{color:var(--a2);text-decoration:none;}.fa:hover{text-decoration:underline;}
+
+/* MODAL */
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(10px);z-index:500;align-items:center;justify-content:center;padding:1rem;}
+.mbg.open{display:flex;}
+.mi{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r2);max-width:780px;width:100%;max-height:92vh;overflow-y:auto;padding:2.5rem;position:relative;box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 0 1px var(--border2);}
+.mclose{position:absolute;top:1.25rem;right:1.25rem;background:var(--bg3);border:1px solid var(--border2);color:var(--muted2);width:34px;height:34px;border-radius:9px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.mclose:hover{background:var(--border);color:var(--text);}
+.mhead{display:flex;align-items:center;gap:1.1rem;margin-bottom:.75rem;}
+.mnum{width:52px;height:52px;border-radius:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:900;font-family:'JetBrains Mono',monospace;}
+.mtitle{font-size:1.6rem;font-weight:900;letter-spacing:-.02em;margin-bottom:.2rem;}
+.msub{font-size:.875rem;color:var(--muted2);}
+.mtags{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:2rem;}
+.mtags span{font-size:.75rem;color:var(--muted2);background:rgba(30,44,74,.9);padding:.25rem .65rem;border-radius:6px;border:1px solid var(--border);}
+.msec{margin-bottom:1.75rem;}
+.msec h3{font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--a2);margin-bottom:.75rem;font-weight:700;}
+.msec p,.msec li{font-size:.9rem;color:var(--muted2);line-height:1.85;}
+.msec ul{padding-left:1.25rem;}.msec li{margin-bottom:.35rem;}
+.msec p strong{color:var(--text);}
+pre{background:#060a14;border:1px solid var(--border);border-radius:10px;padding:1.2rem 1.4rem;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:.83rem;color:#c9d1d9;line-height:1.7;}
+code{font-family:'JetBrains Mono',monospace;background:var(--bg3);padding:.1rem .4rem;border-radius:4px;font-size:.8rem;color:var(--a2);}
+pre code{background:none;padding:0;color:inherit;}
+</style>
 </head>
 <body>
-<div class="prog" id="prog"></div>
+<div id="prog"></div>
 
 <nav>
   <div class="logo">Zero → AI</div>
@@ -134,268 +183,154 @@
     <li><a href="#modules">Modules</a></li>
     <li><a href="#ai">AI Bridge</a></li>
     <li><a href="#study">Study Tips</a></li>
+    <li><a href="https://github.com/DN-OpenSource/DSA-Algorithm" target="_blank" style="color:var(--a1)">GitHub ↗</a></li>
   </ul>
   <button class="hbg" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
 
 <section class="hero" id="home">
-  <div class="hero-grid"></div>
+  <canvas id="particles"></canvas>
+  <div class="hero-glow"></div>
   <div class="hero-inner">
-    <div class="badge">🚀 Python 3 &nbsp;·&nbsp; 15 Modules &nbsp;·&nbsp; Zero to AI</div>
-    <h1>From <span>Zero to AI</span><br>DSA &amp; Algorithms</h1>
-    <p class="sub">Master data structures and algorithms from first principles — then build a neural network from scratch in pure Python.</p>
-    <div class="stats">
-      <div><div class="stat-n">15</div><div class="stat-l">Modules</div></div>
-      <div><div class="stat-n">40+</div><div class="stat-l">Python Files</div></div>
-      <div><div class="stat-n">7</div><div class="stat-l">Big-O Classes</div></div>
-      <div><div class="stat-n">1</div><div class="stat-l">Neural Net</div></div>
+    <div class="hero-badge">✦ Python 3 &nbsp;·&nbsp; 15 Modules &nbsp;·&nbsp; Zero to AI</div>
+    <h1>From <span class="grad">Zero to AI</span><br>DSA &amp; Algorithms</h1>
+    <p class="hero-sub">Master data structures and algorithms from first principles — then build a neural network from scratch in pure Python.</p>
+    <div class="hero-stats">
+      <div><div class="stat-num">15</div><div class="stat-lbl">Modules</div></div>
+      <div><div class="stat-num">40+</div><div class="stat-lbl">Python Files</div></div>
+      <div><div class="stat-num">7</div><div class="stat-lbl">Big-O Classes</div></div>
+      <div><div class="stat-num">1</div><div class="stat-lbl">Neural Net</div></div>
     </div>
-    <div class="btns">
+    <div class="hero-btns">
       <a class="btn btn-p" href="#modules">Start Learning ↓</a>
-      <a class="btn btn-s" href="https://github.com/DN-OpenSource/DSA-Algorithm" target="_blank">View on GitHub</a>
+      <a class="btn btn-g" href="https://github.com/DN-OpenSource/DSA-Algorithm" target="_blank">⭐ Star on GitHub</a>
     </div>
   </div>
 </section>
 
-<section id="roadmap" class="bg-section">
+<section id="roadmap" style="background:var(--bg2)">
   <div class="container">
-    <div class="sh"><span class="eye">Course Structure</span><h2 class="st">Complete Roadmap</h2><p class="sd">Every module: Theory → Worked Example → Runnable Python.</p></div>
+    <div class="sh"><span class="eye">Course Structure</span><h2 class="st">Complete Roadmap</h2><p class="sd">Every module follows Theory → Worked Example → Runnable Python.</p></div>
     <div class="tw"><table><thead><tr><th>#</th><th>Module</th><th>Topics</th></tr></thead><tbody id="rtb"></tbody></table></div>
   </div>
 </section>
 
 <section id="bigo">
   <div class="container">
-    <div class="sh"><span class="eye">Complexity</span><h2 class="st">Big-O Cheatsheet</h2><p class="sd">How runtime grows with input size — the universal language of algorithmic efficiency.</p></div>
-    <div class="bigo-grid" id="bg"></div>
+    <div class="sh"><span class="eye">Complexity</span><h2 class="st">Big-O Cheatsheet</h2><p class="sd">How runtime grows with input size — the universal language of efficiency.</p></div>
+    <div class="bigo-grid" id="bgrid"></div>
     <div class="tw"><table><thead><tr><th>Algorithm</th><th>Best</th><th>Average</th><th>Worst</th><th>Space</th></tr></thead><tbody id="atb"></tbody></table></div>
   </div>
 </section>
 
-<section id="modules" class="bg-section">
+<section id="modules">
   <div class="container">
-    <div class="sh"><span class="eye">All 15 Modules</span><h2 class="st">Course Content</h2><p class="sd">Click any card to explore theory, worked examples, and code.</p></div>
-    <div class="grid" id="mg"></div>
+    <div class="sh"><span class="eye">All 15 Modules</span><h2 class="st">Course Content</h2><p class="sd">Click any card to explore theory, worked examples, and Python code.</p></div>
+    <div class="mgrid" id="mg"></div>
   </div>
 </section>
 
 <section id="ai">
   <div class="container">
-    <div class="sh"><span class="eye">Module 15</span><h2 class="st">Bridge to AI</h2><p class="sd">Every DSA concept maps directly to a technique in AI and machine learning.</p></div>
-    <div class="tw"><table><thead><tr><th>DSA Topic</th><th>Where it appears in AI / ML</th></tr></thead><tbody id="aitb"></tbody></table></div>
+    <div class="sh"><span class="eye">Module 15</span><h2 class="st">Bridge to AI</h2><p class="sd">Every DSA concept maps directly to a technique in AI and ML.</p></div>
+    <div class="aigrid" id="aig"></div>
   </div>
 </section>
 
-<section id="study" class="bg-section">
+<section id="study" style="background:var(--bg2)">
   <div class="container">
-    <div class="sh"><span class="eye">How to Study</span><h2 class="st">Study Strategy</h2><p class="sd">Get the most out of every module.</p></div>
-    <div class="tips" id="tg"></div>
+    <div class="sh"><span class="eye">How to Study</span><h2 class="st">Study Strategy</h2><p class="sd">Battle-tested techniques to get the most from every module.</p></div>
+    <div class="tgrid" id="tg"></div>
   </div>
 </section>
 
 <footer>
   <div class="fl">From Zero to AI</div>
-  <p class="fs">DSA &amp; Algorithms Course · Python 3 · Open Source · <a class="fa" href="https://github.com/DN-OpenSource/DSA-Algorithm" target="_blank">GitHub</a></p>
+  <p class="fs">DSA &amp; Algorithms · Python 3 · Open Source · <a class="fa" href="https://github.com/DN-OpenSource/DSA-Algorithm" target="_blank">GitHub ↗</a></p>
 </footer>
 
-<div class="mb" id="modal" onclick="closeModal(event)">
-  <div class="modal" id="mi">
-    <button class="mc" onclick="closeModal()">✕</button>
-    <div id="mbody"></div>
-  </div>
+<div class="mbg" id="modal" onclick="closeModal(event)">
+  <div class="mi" id="mi"><button class="mclose" onclick="closeModal()">✕</button><div id="mbody"></div></div>
 </div>
 
 <script>
 const M=[
-  {n:1,c:0,ti:"Foundations",su:"Big-O, memory, problem solving",tags:["Big-O","Complexity","Memory","Problem Solving"],files:["big_o.py","complexity_examples.py"],
-   desc:"The language of algorithmic efficiency — how we compare algorithms independent of hardware.",
-   th:"A <strong>data structure</strong> organizes data for efficient use. An <strong>algorithm</strong> is a finite sequence of steps turning input into output. <strong>Big-O</strong> describes how runtime grows with input size <code>n</code>. At n=10⁶: O(n)→ms, O(n²)→minutes, O(2ⁿ)→heat-death.",
-   ex:"Count inner-line runs:\n\nfor i in range(n):      # n times\n    for j in range(n):  # n times each\n        x += 1          # n×n = n² → O(n²)",
-   tk:["Restate the problem in your own words before coding.","Write 1–2 small examples by hand first.","Brute-force first, then optimize the bottleneck.","Pick the data structure that removes the bottleneck.","Always test edge cases: empty, one element, duplicates."]},
-  {n:2,c:1,ti:"Arrays & Strings",su:"Two pointers, sliding window, prefix sums",tags:["Two Pointers","Sliding Window","Prefix Sum","Dynamic Array"],files:["two_pointers.py","sliding_window.py","prefix_sum.py"],
-   desc:"The most fundamental structure — contiguous memory with O(1) access and three essential patterns.",
-   th:"An <strong>array</strong> stores items contiguously; <code>arr[i]</code> is O(1) via pointer arithmetic. Python <strong>list</strong> doubles when full — append is amortized O(1). <strong>Strings</strong> are immutable; slicing copies.",
-   ex:"Two-sum on sorted [1,3,4,6,8,11], target=10:\nL=0(1), R=5(11): 12>10 → R--\nL=0(1), R=4(8):  9<10  → L++\nL=1(3), R=4(8): 11>10  → R--\nL=1(3), R=3(6):  9<10  → L++\nL=2(4), R=3(6): 10 ✓ Found!",
-   tk:["Two Pointers: walk L/R inward — sorted arrays, palindromes, pair sums.","Sliding Window: maintain [L,R] with a property; expand/shrink.","Prefix Sum: pre[i]=arr[0]+…+arr[i-1]; range sum in O(1)."]},
-  {n:3,c:2,ti:"Linked Lists",su:"Singly, doubly, fast & slow pointers",tags:["Singly","Doubly","Circular","Reverse","Cycle Detection"],files:["singly_linked_list.py","doubly_linked_list.py"],
-   desc:"Chains of nodes — O(1) insert at head, O(n) access, with two famous pointer patterns.",
-   th:"A <strong>linked list</strong> is a chain of Nodes each holding a value and a next pointer. No random access (O(n)), but O(1) insert/delete given a pointer. Variants: <strong>singly</strong>, <strong>doubly</strong> (adds prev), <strong>circular</strong> (tail→head).",
-   ex:"Reverse 1→2→3→None:\nprev=None, curr=1\n① nxt=2; curr.next=None; prev=1; curr=2\n② nxt=3; curr.next=1;    prev=2; curr=3\n③ nxt=None; curr.next=2; prev=3\nResult: 3→2→1→None ✓",
-   tk:["Fast & slow pointers: detect cycles, find middle in one pass.","Reverse in-place with three pointers (prev, curr, nxt).","Doubly linked: O(1) delete given only a node pointer."]},
-  {n:4,c:3,ti:"Stacks & Queues",su:"LIFO, FIFO, deque, monotonic stack",tags:["Stack","Queue","Deque","Monotonic","LIFO","FIFO"],files:["stack.py","queue.py","monotonic_stack.py"],
-   desc:"Ordered collections with restricted access — powering undo/redo, BFS/DFS, call stacks, and more.",
-   th:"<strong>Stack</strong> = LIFO. push/pop/peek all O(1). Powers: call stack, undo, DFS.<br><strong>Queue</strong> = FIFO. enqueue/dequeue O(1). Powers: BFS, task schedulers.<br><strong>Monotonic stack</strong>: values monotone top→bottom. 'Next greater element' in O(n).",
-   ex:"Balanced parentheses '([{}])':\nSee ( → push\nSee [ → push\nSee { → push\nSee } → pop {, match ✓\nSee ] → pop [, match ✓\nSee ) → pop (, match ✓\nStack empty → balanced ✓",
-   tk:["DFS uses a stack (explicit or the call stack).","BFS uses a queue — expands layer by layer.","Browser back/forward buttons = two stacks."]},
-  {n:5,c:4,ti:"Recursion & Backtracking",su:"Base cases, call stack, N-Queens, subsets",tags:["Recursion","Backtracking","N-Queens","Permutations","Subsets"],files:["recursion_basics.py","backtracking.py"],
-   desc:"Functions that call themselves — and exploring decision trees by undoing bad choices.",
-   th:"Every recursion needs: (1) <strong>base case</strong>, (2) <strong>recursive step</strong> making problem smaller, (3) how to <strong>combine</strong> sub-answers.<br><strong>Backtracking</strong> = recursion + undo. Make a choice, recurse; if it fails, undo and try next.",
-   ex:"Backtracking template:\n\ndef solve(state):\n    if is_solution(state):\n        record(state); return\n    for choice in choices(state):\n        if is_valid(choice, state):\n            apply(choice, state)\n            solve(state)\n            undo(choice, state)  # 'back'",
-   tk:["Missing base case = stack overflow.","Recursion depth uses O(depth) call-stack memory.","Backtracking prunes via is_valid — speeds search enormously."]},
-  {n:6,c:0,ti:"Sorting",su:"Merge, quick, heap, counting, radix sort",tags:["Merge Sort","Quick Sort","Heap Sort","Counting Sort","Stability"],files:["elementary_sorts.py","merge_sort.py","quick_sort.py","heap_sort.py","counting_sort.py"],
-   desc:"Sorted data makes dozens of other problems easy — knowing when to use each algorithm matters.",
-   th:"<strong>Merge sort</strong>: stable, O(n log n) always, O(n) space.<br><strong>Quick sort</strong>: fastest in practice (O(n log n) avg), O(n²) worst, in-place.<br><strong>Counting sort</strong>: O(n+k) — integers only.",
-   ex:"Merge sort [5,2,4,6,1,3]:\nSplit → [5,2,4] | [6,1,3]\n      → [5][2,4] | [6][1,3]\nSort  → [2,4]   | [1,3]\nMerge → [2,4,5] | [1,3,6]\nMerge → [1,2,3,4,5,6] ✓",
-   tk:["stable = equal keys keep original order.","Python sorted()/list.sort() is Timsort — O(n log n), stable, adaptive.","Use counting/radix sort for bounded integer keys."]},
-  {n:7,c:1,ti:"Searching",su:"Binary search, lower/upper bound, ternary",tags:["Binary Search","Linear Search","Lower Bound","Upper Bound"],files:["binary_search.py"],
-   desc:"Binary search goes far beyond finding a value — any monotone yes/no condition qualifies.",
-   th:"<strong>Linear search</strong>: O(n), any list.<br><strong>Binary search</strong>: O(log n), sorted list, halves search space each step.<br>Key: use whenever the answer space is <em>monotone</em> — a yes/no boundary that flips exactly once.",
-   ex:"Find 9 in [1,3,5,7,9,11,13]:\nlo=0, hi=6, mid=3→7.  7<9,  lo=4\nlo=4, hi=6, mid=5→11. 11>9, hi=4\nlo=4, hi=4, mid=4→9.  Found ✓",
-   tk:["Classic: find value in sorted list.","sqrt(n) — binary search on [0, n].","'Min capacity to ship in k days' — binary search on the answer.","Distinguish lower_bound (first ≥) from upper_bound (first >)."]},
-  {n:8,c:2,ti:"Hashing",su:"Hash maps, sets, chaining, open addressing",tags:["Hash Table","Dict","Set","Chaining","Collision"],files:["hash_table.py","hashing_patterns.py"],
-   desc:"Average O(1) lookup by computing an index from the key — the backbone of Python dicts and sets.",
-   th:"A <strong>hash table</strong> computes <code>h = hash(key) % size</code> and stores at that bucket. <strong>Collisions</strong>: chaining (linked list per bucket) or open addressing (probe next slot). Resize when load factor > 0.7.",
-   ex:"Two-sum (unsorted) [2,7,11,15], target=9:\ni=0: x=2, need 7? Not seen. Store {2:0}\ni=1: x=7, need 2? Seen at 0! → (0,1) ✓\nTime: O(n) vs O(n²) brute-force",
-   tk:["'Seen before?' → set.","'Count occurrences' → dict.","Python dict/set: O(1) average, O(n) worst."]},
-  {n:9,c:3,ti:"Trees",su:"BST, AVL, heap, traversals",tags:["BST","Heap","AVL","Preorder","Inorder","Level-Order"],files:["binary_tree.py","bst.py","heap.py"],
-   desc:"Hierarchical structures giving O(log n) search, sorted traversal, and priority queues.",
-   th:"<strong>BST</strong>: left < node < right; O(log n) ops when balanced.<br><strong>Heap</strong> (min/max): complete binary tree stored in array. Children of i at 2i+1 and 2i+2. Python heapq is a min-heap.",
-   ex:"Insert 5,3,7,4,1 into BST:\n        5\n       / \\\n      3   7\n     / \\\n    1   4\n\nInorder → 1,3,4,5,7 (sorted ✓)",
-   tk:["Preorder: node→left→right","Inorder: left→node→right  (sorted on BST)","Postorder: left→right→node","Level-order (BFS): use a queue"]},
-  {n:10,c:4,ti:"Graphs",su:"BFS, DFS, Dijkstra, Bellman-Ford, MST, topo sort",tags:["BFS","DFS","Dijkstra","MST","Topo Sort","DAG"],files:["graph_basics.py","bfs_dfs.py","dijkstra.py","topo_sort.py"],
-   desc:"The most general structure — nodes and edges model roads, dependencies, social networks, neural nets.",
-   th:"Graph = nodes + edges. Directed/undirected, weighted/unweighted, cyclic/DAG.<br>Storage: <strong>adjacency list</strong> for sparse; <strong>matrix</strong> for dense.<br>BFS = O(V+E), Dijkstra = O((V+E)log V), Kruskal = O(E log V).",
-   ex:"BFS shortest path 1→5 on 1-2,1-3,2-4,3-4,4-5:\nQueue:[1] dist:{1:0}\nPop 1 → enqueue 2,3 dist 1\nPop 2 → enqueue 4 dist 2\nPop 3 → 4 already seen\nPop 4 → enqueue 5 dist 3\nDist 1→5 = 3 ✓",
-   tk:["BFS = ripples. Queue. Shortest path (unweighted).","DFS = torch in a maze. Connectivity, cycles, topo sort.","Dijkstra = BFS + min-heap. Non-negative weights.","Topo sort: valid ordering of a DAG (build systems, dependencies)."]},
-  {n:11,c:0,ti:"Dynamic Programming",su:"Memoization, tabulation, LCS, knapsack, edit distance",tags:["Memoization","Tabulation","LCS","Knapsack","Coin Change"],files:["dp_basics.py","coin_change.py","lcs.py","knapsack.py","edit_distance.py"],
-   desc:"Recursion with a notebook — solve overlapping subproblems once, store results, never redo work.",
-   th:"DP requires: (1) <strong>optimal substructure</strong> — optimal answer built from smaller ones, (2) <strong>overlapping subproblems</strong> — same sub-question asked many times.<br><strong>Top-down</strong>: recurse + cache. <strong>Bottom-up</strong>: fill array from base upward.",
-   ex:"Climbing stairs (1 or 2 steps at a time):\ndp[n] = dp[n-1] + dp[n-2]\nBase: dp[0]=1, dp[1]=1\n\nClassics: Coin Change, LCS (basis of diff),\n0/1 Knapsack, Edit Distance",
-   tk:["Define the state in one sentence before coding.","Write the transition: how is dp[i] built from earlier?","Identify the base case and where the final answer lives."]},
-  {n:12,c:1,ti:"Greedy Algorithms",su:"Activity selection, Huffman coding",tags:["Greedy","Activity Selection","Huffman","Exchange Argument"],files:["activity_selection.py","huffman.py"],
-   desc:"Make the locally best choice at each step — fast and simple when provably correct.",
-   th:"Greedy picks the locally optimal choice hoping global optimum follows. Proof via <em>exchange argument</em>. 0/1 Knapsack is <strong>not</strong> greedy-solvable — use DP.",
-   ex:"Activity selection — pick ending-soonest:\nSorted by end time:\n→ pick (1,4)\n→ skip (3,5) overlaps\n→ pick (5,7)\n→ pick (8,11)\nMaximal non-overlapping set ✓",
-   tk:["0/1 Knapsack: greedy fails — use DP.","Fractional Knapsack: sort by value/weight ratio.","Huffman: always merge two least-frequent nodes."]},
-  {n:13,c:2,ti:"Bit Manipulation & Math",su:"Bitwise tricks, GCD, sieve, modular exponentiation",tags:["XOR","AND","OR","Shift","GCD","Sieve","Primes"],files:["bit_tricks.py","number_theory.py"],
-   desc:"Direct bit operations replace loops with single CPU instructions — XOR has magical properties.",
-   th:"<code>x & 1</code> = is x odd? <code>x & (x-1)</code> = clear lowest set bit. <code>a ^ b ^ b == a</code> = XOR is its own inverse.<br>Number theory: Euclid GCD O(log n), Sieve O(n log log n), modular exponentiation O(log b).",
-   ex:"Find the lonely number (all others appear twice):\n[2, 3, 5, 3, 2]\n2^3^5^3^2 = 5\nPairs cancel via XOR → unique remains ✓",
-   tk:["x & 1 — odd/even check.","x & (x-1) — strip lowest set bit (count bits by repeating).","a ^ b ^ b == a — recover a without knowing b.","Left shift << k = multiply by 2^k."]},
-  {n:14,c:3,ti:"Advanced Structures",su:"Trie, Segment Tree, Union-Find (DSU)",tags:["Trie","Segment Tree","Union-Find","DSU","Fenwick Tree"],files:["trie.py","union_find.py","segment_tree.py"],
-   desc:"The power tools — reach for these once the basics are second nature.",
-   th:"<strong>Trie</strong>: O(L) lookup per word regardless of dictionary size.<br><strong>Union-Find</strong>: amortized O(α(n)) ≈ O(1) find/union with path compression + union by rank.<br><strong>Segment Tree</strong>: range sum/min/max + point updates in O(log n).",
-   ex:"Kruskal's MST with Union-Find:\n1. Sort all edges by weight\n2. For each edge (u,v,w):\n   if find(u) != find(v):\n       take edge\n       union(u, v)\n3. Stop at V-1 edges → O(E log V)",
-   tk:["Trie: O(L) per word independent of vocabulary size.","Union-Find: near-O(1) with path compression + union by rank.","Segment tree: range queries + point updates in O(log n).","Fenwick/BIT: lighter alternative for prefix sums."]},
-  {n:15,c:4,ti:"Bridge to AI",su:"Vectors, kNN, linear regression, neural net from scratch",tags:["Vectors","kNN","k-Means","Gradient Descent","Neural Net","Backprop"],files:["vectors.py","linear_regression.py","knn.py","kmeans.py","perceptron.py","neural_net.py"],
-   desc:"Apply everything you've learned to build ML algorithms in pure Python — no NumPy.",
-   th:"A <strong>model</strong> is f(x;θ) mapping inputs to outputs. A <strong>loss</strong> measures error. <strong>Gradient descent</strong> moves θ to reduce loss — that's learning. Backpropagation = recursion on the computation graph.",
-   ex:"What you build in this module:\n1. vectors.py     — dot product, cosine similarity\n2. linear_reg.py  — fit y=wx+b with gradient descent\n3. knn.py         — classify by k nearest neighbors\n4. kmeans.py      — unsupervised clustering\n5. perceptron.py  — single-neuron linear classifier\n6. neural_net.py  — 2-layer net + backprop (XOR problem)",
-   tk:["Once this clicks: switch to NumPy/PyTorch — just learn the API.","Next: linear algebra, probability, calculus for backprop intuition.","Watch: Andrej Karpathy's 'Neural Networks: Zero to Hero'.","Ship something: MNIST classifier, tiny LLM, small RAG system."]}
+  {n:1,c:0,ti:"Foundations",su:"Big-O, memory, problem solving",tags:["Big-O","Complexity","Memory","Problem Solving"],files:["big_o.py","complexity_examples.py"],desc:"The language of algorithmic efficiency — how we compare algorithms independent of hardware.",th:"A <strong>data structure</strong> organizes data for efficient use. An <strong>algorithm</strong> is a finite sequence of steps turning input into output. <strong>Big-O</strong> describes how runtime grows with input size <code>n</code>. At n=10⁶: O(n)→ms, O(n²)→minutes, O(2ⁿ)→heat-death.",ex:"Count inner-line runs:\n\nfor i in range(n):      # n times\n    for j in range(n):  # n times each\n        x += 1          # n×n = n² → O(n²)",tk:["Restate the problem in your own words before coding.","Write 1–2 small examples by hand first.","Brute-force first, then optimize the bottleneck.","Pick the data structure that removes the bottleneck.","Always test edge cases: empty, one element, duplicates."]},
+  {n:2,c:1,ti:"Arrays & Strings",su:"Two pointers, sliding window, prefix sums",tags:["Two Pointers","Sliding Window","Prefix Sum","Dynamic Array"],files:["two_pointers.py","sliding_window.py","prefix_sum.py"],desc:"The most fundamental structure — contiguous memory with O(1) access and three essential patterns.",th:"An <strong>array</strong> stores items contiguously; <code>arr[i]</code> is O(1) via pointer arithmetic. Python <strong>list</strong> doubles when full — append is amortized O(1). <strong>Strings</strong> are immutable; slicing copies.",ex:"Two-sum on sorted [1,3,4,6,8,11], target=10:\nL=0(1), R=5(11): 12>10 → R--\nL=0(1), R=4(8):  9<10  → L++\nL=1(3), R=4(8): 11>10  → R--\nL=1(3), R=3(6):  9<10  → L++\nL=2(4), R=3(6): 10 ✓ Found!",tk:["Two Pointers: walk L/R inward — sorted arrays, palindromes, pair sums.","Sliding Window: maintain [L,R] with a property; expand/shrink.","Prefix Sum: pre[i]=arr[0]+…+arr[i-1]; range sum in O(1)."]},
+  {n:3,c:2,ti:"Linked Lists",su:"Singly, doubly, fast & slow pointers",tags:["Singly","Doubly","Circular","Reverse","Cycle Detection"],files:["singly_linked_list.py","doubly_linked_list.py"],desc:"Chains of nodes — O(1) insert at head, O(n) access, with two famous pointer patterns.",th:"A <strong>linked list</strong> is a chain of Nodes each holding a value and a next pointer. No random access (O(n)), but O(1) insert/delete given a pointer. Variants: <strong>singly</strong>, <strong>doubly</strong> (adds prev), <strong>circular</strong> (tail→head).",ex:"Reverse 1→2→3→None:\nprev=None, curr=1\n① nxt=2; curr.next=None; prev=1; curr=2\n② nxt=3; curr.next=1;    prev=2; curr=3\n③ nxt=None; curr.next=2; prev=3\nResult: 3→2→1→None ✓",tk:["Fast & slow pointers: detect cycles, find middle in one pass.","Reverse in-place with three pointers (prev, curr, nxt).","Doubly linked: O(1) delete given only a node pointer."]},
+  {n:4,c:3,ti:"Stacks & Queues",su:"LIFO, FIFO, deque, monotonic stack",tags:["Stack","Queue","Deque","Monotonic","LIFO","FIFO"],files:["stack.py","queue.py","monotonic_stack.py"],desc:"Ordered collections with restricted access — powering undo/redo, BFS/DFS, call stacks, and more.",th:"<strong>Stack</strong> = LIFO. push/pop/peek all O(1). Powers: call stack, undo, DFS.<br><strong>Queue</strong> = FIFO. enqueue/dequeue O(1). Powers: BFS, task schedulers.<br><strong>Monotonic stack</strong>: values monotone top→bottom. 'Next greater element' in O(n).",ex:"Balanced parentheses '([{}])':\nSee ( → push\nSee [ → push\nSee { → push\nSee } → pop {, match ✓\nSee ] → pop [, match ✓\nSee ) → pop (, match ✓\nStack empty → balanced ✓",tk:["DFS uses a stack (explicit or the call stack).","BFS uses a queue — expands layer by layer.","Browser back/forward buttons = two stacks."]},
+  {n:5,c:4,ti:"Recursion & Backtracking",su:"Base cases, call stack, N-Queens, subsets",tags:["Recursion","Backtracking","N-Queens","Permutations","Subsets"],files:["recursion_basics.py","backtracking.py"],desc:"Functions that call themselves — and exploring decision trees by undoing bad choices.",th:"Every recursion needs: (1) <strong>base case</strong>, (2) <strong>recursive step</strong> making problem smaller, (3) how to <strong>combine</strong> sub-answers.<br><strong>Backtracking</strong> = recursion + undo. Make a choice, recurse; if it fails, undo and try next.",ex:"Backtracking template:\n\ndef solve(state):\n    if is_solution(state):\n        record(state); return\n    for choice in choices(state):\n        if is_valid(choice, state):\n            apply(choice, state)\n            solve(state)\n            undo(choice, state)  # 'back'",tk:["Missing base case = stack overflow.","Recursion depth uses O(depth) call-stack memory.","Backtracking prunes via is_valid — speeds search enormously."]},
+  {n:6,c:0,ti:"Sorting",su:"Merge, quick, heap, counting, radix sort",tags:["Merge Sort","Quick Sort","Heap Sort","Counting Sort","Stability"],files:["elementary_sorts.py","merge_sort.py","quick_sort.py","heap_sort.py","counting_sort.py"],desc:"Sorted data makes dozens of problems easy — knowing when to use each algorithm matters.",th:"<strong>Merge sort</strong>: stable, O(n log n) always, O(n) space.<br><strong>Quick sort</strong>: fastest in practice (O(n log n) avg), O(n²) worst, in-place.<br><strong>Counting sort</strong>: O(n+k) — integers only.",ex:"Merge sort [5,2,4,6,1,3]:\nSplit → [5,2,4] | [6,1,3]\n      → [5][2,4] | [6][1,3]\nSort  → [2,4]   | [1,3]\nMerge → [2,4,5] | [1,3,6]\nMerge → [1,2,3,4,5,6] ✓",tk:["stable = equal keys keep original order.","Python sorted()/list.sort() is Timsort — O(n log n), stable, adaptive.","Use counting/radix sort for bounded integer keys."]},
+  {n:7,c:1,ti:"Searching",su:"Binary search, lower/upper bound, ternary",tags:["Binary Search","Linear Search","Lower Bound","Upper Bound"],files:["binary_search.py"],desc:"Binary search goes far beyond finding a value — any monotone yes/no condition qualifies.",th:"<strong>Linear search</strong>: O(n), any list.<br><strong>Binary search</strong>: O(log n), sorted list, halves search space each step.<br>Key: use whenever the answer space is <em>monotone</em> — a yes/no boundary that flips exactly once.",ex:"Find 9 in [1,3,5,7,9,11,13]:\nlo=0, hi=6, mid=3→7.  7<9,  lo=4\nlo=4, hi=6, mid=5→11. 11>9, hi=4\nlo=4, hi=4, mid=4→9.  Found ✓",tk:["Classic: find value in sorted list.","sqrt(n) — binary search on [0, n].","'Min capacity to ship in k days' — binary search on the answer.","Distinguish lower_bound (first ≥) from upper_bound (first >)."]},
+  {n:8,c:2,ti:"Hashing",su:"Hash maps, sets, chaining, open addressing",tags:["Hash Table","Dict","Set","Chaining","Collision"],files:["hash_table.py","hashing_patterns.py"],desc:"Average O(1) lookup by computing an index from the key — the backbone of Python dicts and sets.",th:"A <strong>hash table</strong> computes <code>h = hash(key) % size</code> and stores at that bucket. <strong>Collisions</strong>: chaining (linked list per bucket) or open addressing (probe next slot). Resize when load factor > 0.7.",ex:"Two-sum (unsorted) [2,7,11,15], target=9:\ni=0: x=2, need 7? Not seen. Store {2:0}\ni=1: x=7, need 2? Seen at 0! → (0,1) ✓\nTime: O(n) vs O(n²) brute-force",tk:["'Seen before?' → set.","'Count occurrences' → dict.","Python dict/set: O(1) average, O(n) worst."]},
+  {n:9,c:3,ti:"Trees",su:"BST, AVL, heap, traversals",tags:["BST","Heap","AVL","Preorder","Inorder","Level-Order"],files:["binary_tree.py","bst.py","heap.py"],desc:"Hierarchical structures giving O(log n) search, sorted traversal, and priority queues.",th:"<strong>BST</strong>: left < node < right; O(log n) ops when balanced.<br><strong>Heap</strong> (min/max): complete binary tree stored in array. Children of i at 2i+1 and 2i+2. Python heapq is a min-heap.",ex:"Insert 5,3,7,4,1 into BST:\n        5\n       / \\\n      3   7\n     / \\\n    1   4\n\nInorder → 1,3,4,5,7 (sorted ✓)",tk:["Preorder: node→left→right","Inorder: left→node→right  (sorted on BST)","Postorder: left→right→node","Level-order (BFS): use a queue"]},
+  {n:10,c:4,ti:"Graphs",su:"BFS, DFS, Dijkstra, Bellman-Ford, MST, topo sort",tags:["BFS","DFS","Dijkstra","MST","Topo Sort","DAG"],files:["graph_basics.py","bfs_dfs.py","dijkstra.py","topo_sort.py"],desc:"The most general structure — nodes and edges model roads, dependencies, social networks, neural nets.",th:"Graph = nodes + edges. Directed/undirected, weighted/unweighted, cyclic/DAG.<br>Storage: <strong>adjacency list</strong> for sparse; <strong>matrix</strong> for dense.<br>BFS = O(V+E), Dijkstra = O((V+E)log V), Kruskal = O(E log V).",ex:"BFS shortest path 1→5 on 1-2,1-3,2-4,3-4,4-5:\nQueue:[1] dist:{1:0}\nPop 1 → enqueue 2,3 dist 1\nPop 2 → enqueue 4 dist 2\nPop 3 → 4 already seen\nPop 4 → enqueue 5 dist 3\nDist 1→5 = 3 ✓",tk:["BFS = ripples. Queue. Shortest path (unweighted).","DFS = torch in a maze. Connectivity, cycles, topo sort.","Dijkstra = BFS + min-heap. Non-negative weights.","Topo sort: valid ordering of a DAG."]},
+  {n:11,c:0,ti:"Dynamic Programming",su:"Memoization, tabulation, LCS, knapsack, edit distance",tags:["Memoization","Tabulation","LCS","Knapsack","Coin Change"],files:["dp_basics.py","coin_change.py","lcs.py","knapsack.py","edit_distance.py"],desc:"Recursion with a notebook — solve overlapping subproblems once, store results, never redo work.",th:"DP requires: (1) <strong>optimal substructure</strong> — optimal answer built from smaller ones, (2) <strong>overlapping subproblems</strong> — same sub-question asked many times.<br><strong>Top-down</strong>: recurse + cache. <strong>Bottom-up</strong>: fill array from base upward.",ex:"Climbing stairs (1 or 2 steps at a time):\ndp[n] = dp[n-1] + dp[n-2]\nBase: dp[0]=1, dp[1]=1\n\nClassics: Coin Change, LCS (basis of diff),\n0/1 Knapsack, Edit Distance",tk:["Define the state in one sentence before coding.","Write the transition: how is dp[i] built from earlier?","Identify the base case and where the final answer lives."]},
+  {n:12,c:1,ti:"Greedy Algorithms",su:"Activity selection, Huffman coding",tags:["Greedy","Activity Selection","Huffman","Exchange Argument"],files:["activity_selection.py","huffman.py"],desc:"Make the locally best choice at each step — fast and simple when provably correct.",th:"Greedy picks the locally optimal choice hoping global optimum follows. Proof via <em>exchange argument</em>. 0/1 Knapsack is <strong>not</strong> greedy-solvable — use DP.",ex:"Activity selection — pick ending-soonest:\nSorted by end time:\n→ pick (1,4)\n→ skip (3,5) overlaps\n→ pick (5,7)\n→ pick (8,11)\nMaximal non-overlapping set ✓",tk:["0/1 Knapsack: greedy fails — use DP.","Fractional Knapsack: sort by value/weight ratio.","Huffman: always merge two least-frequent nodes."]},
+  {n:13,c:2,ti:"Bit Manipulation & Math",su:"Bitwise tricks, GCD, sieve, modular exponentiation",tags:["XOR","AND","OR","Shift","GCD","Sieve","Primes"],files:["bit_tricks.py","number_theory.py"],desc:"Direct bit operations replace loops with single CPU instructions — XOR has magical properties.",th:"<code>x & 1</code> = is x odd? <code>x & (x-1)</code> = clear lowest set bit. <code>a ^ b ^ b == a</code> = XOR is its own inverse.<br>Number theory: Euclid GCD O(log n), Sieve O(n log log n), modular exponentiation O(log b).",ex:"Find the lonely number (all others appear twice):\n[2, 3, 5, 3, 2]\n2^3^5^3^2 = 5\nPairs cancel via XOR → unique remains ✓",tk:["x & 1 — odd/even check.","x & (x-1) — strip lowest set bit.","a ^ b ^ b == a — recover a without knowing b.","Left shift << k = multiply by 2^k."]},
+  {n:14,c:3,ti:"Advanced Structures",su:"Trie, Segment Tree, Union-Find (DSU)",tags:["Trie","Segment Tree","Union-Find","DSU","Fenwick Tree"],files:["trie.py","union_find.py","segment_tree.py"],desc:"The power tools — reach for these once the basics are second nature.",th:"<strong>Trie</strong>: O(L) lookup per word regardless of dictionary size.<br><strong>Union-Find</strong>: amortized O(α(n)) ≈ O(1) find/union with path compression + union by rank.<br><strong>Segment Tree</strong>: range sum/min/max + point updates in O(log n).",ex:"Kruskal's MST with Union-Find:\n1. Sort all edges by weight\n2. For each edge (u,v,w):\n   if find(u) != find(v):\n       take edge; union(u, v)\n3. Stop at V-1 edges → O(E log V)",tk:["Trie: O(L) per word independent of vocabulary size.","Union-Find: near-O(1) with path compression + union by rank.","Segment tree: range queries + point updates in O(log n).","Fenwick/BIT: lighter alternative for prefix sums."]},
+  {n:15,c:4,ti:"Bridge to AI",su:"Vectors, kNN, linear regression, neural net from scratch",tags:["Vectors","kNN","k-Means","Gradient Descent","Neural Net","Backprop"],files:["vectors.py","linear_regression.py","knn.py","kmeans.py","perceptron.py","neural_net.py"],desc:"Apply everything you've learned to build ML algorithms in pure Python — no NumPy.",th:"A <strong>model</strong> is f(x;θ) mapping inputs to outputs. A <strong>loss</strong> measures error. <strong>Gradient descent</strong> moves θ to reduce loss — that's learning. Backpropagation = recursion on the computation graph.",ex:"What you build in this module:\n1. vectors.py     — dot product, cosine similarity\n2. linear_reg.py  — fit y=wx+b with gradient descent\n3. knn.py         — classify by k nearest neighbors\n4. kmeans.py      — unsupervised clustering\n5. perceptron.py  — single-neuron linear classifier\n6. neural_net.py  — 2-layer net + backprop (XOR problem)",tk:["Once this clicks: switch to NumPy/PyTorch — just learn the API.","Next: linear algebra, probability, calculus for backprop intuition.","Watch: Andrej Karpathy's 'Neural Networks: Zero to Hero'.","Ship something: MNIST classifier, tiny LLM, small RAG system."]}
 ];
+const BIGO=[{n:"O(1)",cl:"bg",name:"Constant",ex:"array[i]"},{n:"O(log n)",cl:"bg",name:"Logarithmic",ex:"binary search"},{n:"O(n)",cl:"by",name:"Linear",ex:"scan a list"},{n:"O(n log n)",cl:"by",name:"Linearithmic",ex:"merge sort"},{n:"O(n²)",cl:"br",name:"Quadratic",ex:"nested loops"},{n:"O(2ⁿ)",cl:"br",name:"Exponential",ex:"brute-force subsets"},{n:"O(n!)",cl:"br",name:"Factorial",ex:"all permutations"}];
+const ALGOS=[["Binary Search","O(log n)","O(log n)","O(log n)","O(1)","g","g","r"],["Merge Sort","O(n log n)","O(n log n)","O(n log n)","O(n)","y","y","r"],["Quick Sort","O(n log n)","O(n log n)","O(n²)","O(log n)","y","y","r"],["Heap Sort","O(n log n)","O(n log n)","O(n log n)","O(1)","y","y","r"],["Counting Sort","O(n+k)","O(n+k)","O(n+k)","O(k)","g","g","g"],["BFS / DFS","O(V+E)","O(V+E)","O(V+E)","O(V)","y","y","y"],["Dijkstra","O((V+E)log V)","O((V+E)log V)","O((V+E)log V)","O(V)","y","y","y"],["Hash Lookup","O(1)","O(1)","O(n)","O(n)","g","g","r"]];
+const AI_MAP=[["Arrays","Tensors, embeddings, images, audio"],["Hash tables","Tokenizers, vocabularies, feature lookup"],["Trees","Decision trees, random forests, XGBoost, MCTS"],["Heaps","Top-K retrieval, beam search, priority experience replay"],["Graphs","Computation graph, knowledge graphs, GNNs"],["BFS / DFS","Search in games (chess, Go), robot pathfinding"],["Recursion","Backpropagation through the computation graph"],["DP","RL value iteration, HMM Viterbi, edit distance (NLP)"],["Sorting","Ranking, top-K results, nearest-neighbor indexing"],["Binary search","Hyperparameter tuning, retrieval, learning rate finder"],["Greedy","Greedy decoding in LLMs, A* heuristics"],["Bit tricks","Quantized models, locality-sensitive hashing"],["Tries","Autocomplete, BPE tokenizers (GPT, BERT)"],["Union-Find","Image segmentation, graph clustering"],["Segment tree","Range-sum rewards in RL, fast attention variants"]];
+const TIPS=[{i:"✍️",t:"Hand first",x:"Work every example by hand on paper before running code. You understand only what you do yourself."},{i:"🔨",t:"Break things",x:"Remove the base case, flip a comparator, add a print. Understanding survives only what you change."},{i:"📊",t:"Big-O first",x:"Write the Big-O of your solution before coding. It guides which data structure to reach for."},{i:"🧩",t:"Practice problems",x:"After each module: 5–10 LeetCode problems on that topic. Patterns compound across modules."},{i:"🔗",t:"Connect the dots",x:"Module 15 references all earlier topics intentionally. 'Tensor' = array. 'Backprop' = recursion on a graph."},{i:"🚀",t:"Ship something",x:"Build a digit classifier, fine-tune a tiny LLM, or a small RAG system. Shipping teaches more than reading."}];
 
-const BIGO=[
-  {n:"O(1)",lv:"og",name:"Constant",ex:"array[i]"},
-  {n:"O(log n)",lv:"og",name:"Logarithmic",ex:"binary search"},
-  {n:"O(n)",lv:"oo",name:"Linear",ex:"scan a list"},
-  {n:"O(n log n)",lv:"oo",name:"Linearithmic",ex:"merge sort"},
-  {n:"O(n²)",lv:"ob2",name:"Quadratic",ex:"nested loops"},
-  {n:"O(2ⁿ)",lv:"ob2",name:"Exponential",ex:"brute-force subsets"},
-  {n:"O(n!)",lv:"ob2",name:"Factorial",ex:"all permutations"},
-];
-
-const ALGOS=[
-  ["Binary Search","O(log n)","O(log n)","O(log n)","O(1)","og"],
-  ["Merge Sort","O(n log n)","O(n log n)","O(n log n)","O(n)","oo"],
-  ["Quick Sort","O(n log n)","O(n log n)","O(n²)","O(log n)","oo"],
-  ["Heap Sort","O(n log n)","O(n log n)","O(n log n)","O(1)","oo"],
-  ["Counting Sort","O(n+k)","O(n+k)","O(n+k)","O(k)","og"],
-  ["BFS / DFS","O(V+E)","O(V+E)","O(V+E)","O(V)","oo"],
-  ["Dijkstra","O((V+E)log V)","O((V+E)log V)","O((V+E)log V)","O(V)","oo"],
-  ["Hash Lookup","O(1)","O(1)","O(n)","O(n)","og"],
-];
-
-const AI_MAP=[
-  ["Arrays","Tensors, embeddings, images, audio"],
-  ["Hash tables","Tokenizers, vocabularies, feature lookup"],
-  ["Trees","Decision trees, random forests, XGBoost, MCTS"],
-  ["Heaps","Top-K retrieval, beam search, priority experience replay"],
-  ["Graphs","Computation graph, knowledge graphs, GNNs"],
-  ["BFS / DFS","Search in games (chess, Go), robot pathfinding"],
-  ["Recursion","Backpropagation through the computation graph"],
-  ["DP","RL value iteration, HMM Viterbi, edit distance (NLP)"],
-  ["Sorting","Ranking, top-K results, nearest-neighbor indexing"],
-  ["Binary search","Hyperparameter search, retrieval, learning rate finder"],
-  ["Greedy","Greedy decoding in LLMs, A* heuristics"],
-  ["Bit tricks","Quantized models, locality-sensitive hashing"],
-  ["Tries","Autocomplete, BPE tokenizers"],
-  ["Union-Find","Image segmentation, graph clustering"],
-  ["Segment tree","Range-sum reward in RL, fast attention variants"],
-];
-
-const TIPS=[
-  {i:"✍️",t:"Hand first",x:"Work every example by hand on paper before running code. You understand only what you do yourself."},
-  {i:"🔨",t:"Break things",x:"Remove the base case, flip a comparator, add a print. Understanding survives only what you change."},
-  {i:"📊",t:"Big-O first",x:"Write the Big-O of your solution before coding. It guides which data structure to reach for."},
-  {i:"🧩",t:"Practice problems",x:"After each module: 5–10 LeetCode problems on that topic. Patterns compound across modules."},
-  {i:"🔗",t:"Connect the dots",x:"Module 15 references all earlier topics intentionally. 'Tensor' = array. 'Backprop' = recursion."},
-  {i:"🚀",t:"Ship something",x:"Build a digit classifier, fine-tune a tiny LLM, or create a small RAG system. Shipping beats reading."},
-];
-
-const TC=["#6c63ff","#00c8ff","#22c55e","#f59e0b","#ff6584"];
+const TC=["#7c6dfa","#06b6d4","#22c55e","#f59e0b","#f472b6"];
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function ob(t,c){const m={g:'ob-g',y:'ob-y',r:'ob-r'};return`<span class="ob ${m[c]||'ob-y'}">${t}</span>`;}
 
-// Render roadmap
-document.getElementById('rtb').innerHTML=M.map(m=>`<tr>
-  <td style="font-weight:700;color:var(--accent)">${m.n}</td>
-  <td><a class="ml" href="#m${m.n}">${m.ti}</a></td>
-  <td>${m.tags.map(t=>`<span class="ttag">${t}</span>`).join('')}</td></tr>`).join('');
+document.getElementById('rtb').innerHTML=M.map(m=>`<tr><td>${m.n}</td><td><a class="ml" href="#m${m.n}">${m.ti}</a></td><td>${m.tags.map(t=>`<span class="ttag">${t}</span>`).join('')}</td></tr>`).join('');
+document.getElementById('bgrid').innerHTML=BIGO.map(b=>`<div class="bc"><div class="bb ${b.cl}">${b.n}</div><div class="bn">${b.name}</div><div class="be">${b.ex}</div></div>`).join('');
+document.getElementById('atb').innerHTML=ALGOS.map(([a,b,av,w,sp,bt,avt,wt])=>`<tr><td style="font-weight:700">${a}</td><td>${ob(b,bt)}</td><td>${ob(av,avt)}</td><td>${ob(w,wt)}</td><td style="color:var(--muted2);font-family:'JetBrains Mono',monospace;font-size:.82rem">${sp}</td></tr>`).join('');
+document.getElementById('mg').innerHTML=M.map(m=>`<div class="card c${m.c}" id="m${m.n}" onclick="openM(${m.n-1})"><div class="ctop"><div class="cnum n${m.c}">${String(m.n).padStart(2,'0')}</div><div><div class="ctitle">${m.ti}</div><div class="csub">${m.su}</div></div></div><div class="ctags">${m.tags.slice(0,4).map(t=>`<span class="ctag">${t}</span>`).join('')}</div><div class="cfoot"><span>📄 ${m.files.length} file${m.files.length>1?'s':''}</span><span>Open →</span></div></div>`).join('');
+document.getElementById('aig').innerHTML=AI_MAP.map(([d,a])=>`<div class="aic"><div class="aid">${d}</div><div class="aim">${a}</div></div>`).join('');
+document.getElementById('tg').innerHTML=TIPS.map(t=>`<div class="tip"><div class="ti">${t.i}</div><div class="tit">${t.t}</div><div class="ttx">${t.x}</div></div>`).join('');
 
-// Render big-o
-document.getElementById('bg').innerHTML=BIGO.map(b=>`<div class="bc">
-  <span class="ob ${b.lv}" style="font-size:1.1rem">${b.n}</span>
-  <div class="bn">${b.name}</div><div class="be">${b.ex}</div></div>`).join('');
-document.getElementById('atb').innerHTML=ALGOS.map(([a,b,av,w,sp,lv])=>`<tr>
-  <td style="font-weight:600">${a}</td>
-  <td><span class="ob ${lv}">${b}</span></td>
-  <td><span class="ob ${lv}">${av}</span></td>
-  <td><span class="ob ob2">${w}</span></td>
-  <td style="color:var(--muted)">${sp}</td></tr>`).join('');
-
-// Render modules
-document.getElementById('mg').innerHTML=M.map(m=>`<div class="card" id="m${m.n}" onclick="openM(${m.n-1})">
-  <div class="ch"><div class="cn t${m.c}" style="color:${TC[m.c]}">${String(m.n).padStart(2,'0')}</div><div class="ct">${m.ti}</div></div>
-  <div class="cb"><div class="cd">${m.su}</div>
-  <div class="ctags">${m.tags.slice(0,4).map(t=>`<span class="ctag">${t}</span>`).join('')}</div></div>
-  <div class="cf"><span>📄 ${m.files.length} file${m.files.length>1?'s':''}</span><span style="color:var(--accent2)">Expand →</span></div></div>`).join('');
-
-// Render AI
-document.getElementById('aitb').innerHTML=AI_MAP.map(([d,a])=>`<tr>
-  <td style="font-weight:600;color:var(--accent2);white-space:nowrap">${d}</td>
-  <td style="color:var(--muted)">${a}</td></tr>`).join('');
-
-// Render tips
-document.getElementById('tg').innerHTML=TIPS.map(t=>`<div class="tip">
-  <div class="ti">${t.i}</div><div class="tit">${t.t}</div><div class="ttx">${t.x}</div></div>`).join('');
-
-// Modal
 function openM(i){
   const m=M[i];
-  document.getElementById('mbody').innerHTML=`
-    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:.75rem">
-      <div class="cn t${m.c}" style="color:${TC[m.c]};width:48px;height:48px;font-size:1rem">${String(m.n).padStart(2,'0')}</div>
-      <div><h2>Module ${m.n} — ${m.ti}</h2><div style="font-size:.85rem;color:var(--muted)">${m.su}</div></div></div>
-    <div class="mm">${m.tags.map(t=>`<span>${t}</span>`).join('')}</div>
-    <div class="ms"><h3>Overview</h3><p>${m.desc}</p></div>
-    <div class="ms"><h3>Theory</h3><p>${m.th}</p></div>
-    <div class="ms"><h3>Worked Example</h3><pre><code>${esc(m.ex)}</code></pre></div>
-    <div class="ms"><h3>Key Takeaways</h3><ul>${m.tk.map(s=>`<li>${s}</li>`).join('')}</ul></div>
-    <div class="ms"><h3>Python Files</h3><p>${m.files.map(f=>`<code>${f}</code>`).join(' &nbsp;')}</p></div>`;
+  document.getElementById('mbody').innerHTML=`<div class="mhead"><div class="mnum n${m.c}">${String(m.n).padStart(2,'0')}</div><div><div class="mtitle">${m.ti}</div><div class="msub">Module ${m.n} · ${m.su}</div></div></div><div class="mtags">${m.tags.map(t=>`<span>${t}</span>`).join('')}</div><div class="msec"><h3>Overview</h3><p>${m.desc}</p></div><div class="msec"><h3>Theory</h3><p>${m.th}</p></div><div class="msec"><h3>Worked Example</h3><pre><code>${esc(m.ex)}</code></pre></div><div class="msec"><h3>Key Takeaways</h3><ul>${m.tk.map(s=>`<li>${s}</li>`).join('')}</ul></div><div class="msec"><h3>Python Files</h3><p>${m.files.map(f=>`<code>${f}</code>`).join(' &nbsp; ')}</p></div>`;
   document.getElementById('modal').classList.add('open');
   document.body.style.overflow='hidden';
 }
 function closeModal(e){
   if(!e||e.target===document.getElementById('modal')||e.currentTarget.tagName==='BUTTON'){
-    document.getElementById('modal').classList.remove('open');
-    document.body.style.overflow='';
+    document.getElementById('modal').classList.remove('open');document.body.style.overflow='';
   }
 }
 function toggleMenu(){document.getElementById('nl').classList.toggle('open');}
 document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>document.getElementById('nl').classList.remove('open')));
-window.addEventListener('scroll',()=>{
-  document.getElementById('prog').style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%';
-});
+window.addEventListener('scroll',()=>{document.getElementById('prog').style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%';});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal({});});
+
+// PARTICLES
+(function(){
+  const c=document.getElementById('particles'),ctx=c.getContext('2d');
+  let pts=[];
+  function resize(){c.width=window.innerWidth;c.height=window.innerHeight;}
+  function init(){
+    resize();pts=[];
+    const n=Math.min(60,Math.floor((c.width*c.height)/18000));
+    for(let i=0;i<n;i++)pts.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.4+.3,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,a:Math.random()*.5+.1});
+  }
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    pts.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>c.width)p.vx*=-1;
+      if(p.y<0||p.y>c.height)p.vy*=-1;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(124,109,250,${p.a})`;ctx.fill();
+    });
+    for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+      const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<120){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(124,109,250,${(1-d/120)*.1})`;ctx.lineWidth=.7;ctx.stroke();}
+    }
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',()=>{resize();});
+  init();draw();
+})();
 </script>
 </body>
 </html>
